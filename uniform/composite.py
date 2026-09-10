@@ -1,4 +1,4 @@
-from constants import (
+from .constants import (
     head_main,
     body_main,
     left_arm_main,

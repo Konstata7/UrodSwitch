@@ -219,3 +219,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .venv/**
+
+# Local media (uploads / результаты обработки) и собранная статика
+/media/
+/staticfiles/

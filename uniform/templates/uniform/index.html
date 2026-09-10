@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uniform Applicator — наложение формы на скин</title>
+    <meta name="description" content="Одностраничный инструмент: наложение формы (uniform) на скин Minecraft. Загрузите два PNG 64×64 и скачайте результат.">
+    <link rel="stylesheet" href="{% static 'uniform/css/style.css' %}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <p class="logo">Uniform&nbsp;Applicator</p>
+        <h1>Наложи форму на свой скин</h1>
+        <p class="lead">Загрузите скин и форму — получите готовое изображение за один шаг.</p>
+    </div>
+</header>
+
+<main>
+    <section class="section" aria-labelledby="tool-title">
+        <div class="container container-narrow">
+            <h2 id="tool-title" class="visually-hidden">Инструмент</h2>
+
+            {# --- сообщение об ошибке (серверная отправка формы без JS) --- #}
+            {% if error %}
+                <div class="alert alert-error" role="alert">{{ error }}</div>
+            {% endif %}
+            {# --- сообщение для JS (AJAX-ошибки) --- #}
+            <div id="js-message" class="alert alert-error" role="alert" hidden></div>
+
+            <form id="uniform-form" method="post" enctype="multipart/form-data"
+                  action="{% url 'uniform:index' %}" novalidate>
+                {% csrf_token %}
+
+                <div class="upload-grid">
+                    {# ---------- 1. Скин ---------- #}
+                    <label class="dropzone" for="id-skin">
+                        <input class="file-input" type="file" id="id-skin" name="skin"
+                               accept="image/png" required>
+                        <span class="dropzone-title">1. Скин</span>
+                        <img class="preview" id="preview-skin" alt="Предпросмотр скина" hidden>
+                        <span class="dropzone-hint">PNG&nbsp;64×64 — ваш скин</span>
+                    </label>
+
+                    {# ---------- 2. Форма (uniform) ---------- #}
+                    <label class="dropzone" for="id-uniform">
+                        <input class="file-input" type="file" id="id-uniform" name="uniform"
+                               accept="image/png" required>
+                        <span class="dropzone-title">2. Форма</span>
+                        <img class="preview" id="preview-uniform" alt="Предпросмотр формы" hidden>
+                        <span class="dropzone-hint">PNG&nbsp;64×64 на прозрачном фоне</span>
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary" id="submit-btn">Наложить форму</button>
+                    <span id="status" class="status" hidden>Обработка…</span>
+                </div>
+            </form>
+
+            {# ---------- Результат ---------- #}
+            <section id="result" class="result" aria-labelledby="result-title"
+                     {% if not result_url %}hidden{% endif %}>
+                <h2 id="result-title">Результат</h2>
+                <div class="result-image-wrap">
+                    <img id="result-image" class="preview preview-lg"
+                         src="{% if result_url %}{{ result_url }}{% endif %}" alt="Скин с наложенной формой">
+                </div>
+                <div class="actions">
+                    <a id="download-link" class="btn btn-download"
+                       href="{% if result_url %}{{ result_url }}{% endif %}"
+                       download="{{ result_name|default:'uniform_applicator.png' }}">Скачать PNG</a>
+                    <a id="blockbench-btn" class="btn btn-blockbench btn-primary"
+                       href="{% if result_file %}{% url 'uniform:blockbench' result_file %}{% else %}#{% endif %}"
+                       target="_blank" rel="noopener noreferrer"
+                       title="Открыть получившийся скин в веб-редакторе Blockbench">Редактировать в Blockbench&nbsp;Web</a>
+                    <button type="button" class="btn" id="reset-btn">Заново</button>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    {# ---------- Как это работает (заполняется под задачу) ---------- #}
+    <section class="section section-muted" aria-labelledby="howto-title">
+        <div class="container">
+            <h2 id="howto-title">Как это работает</h2>
+            <ol class="steps">
+                <li><strong>Скин.</strong> Загрузите PNG 64×64 — атлас скина, на который нужно наложить форму.</li>
+                <li><strong>Форма.</strong> Загрузите PNG 64×64 на прозрачном фоне: области тела (голова, туловище,
+                    руки, ноги) рисуются по координатам из <code>uniform/constants.py</code>.</li>
+                <li><strong>Готово.</strong> Сервер наложит форму — результат можно скачать PNG
+                    или сразу доработать в веб-редакторе <strong>Blockbench</strong>.</li>
+            </ol>
+        </div>
+    </section>
+
+    {# ---------- О сервисе (заполняется под задачу) ---------- #}
+    <section class="section" aria-labelledby="about-title">
+        <div class="container">
+            <h2 id="about-title">О сервисе</h2>
+            <p>Текст о том, зачем нужен сервис, для кого он, какие форматы поддерживаются и что планируется.
+                Этот блок и страницу в целом можно свободно заполнять и переделывать под свою задачу.</p>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>Uniform Applicator — подготовленный одностраничник на Django. Код: <code>uniform/</code>, настройки: <code>config/</code>.</p>
+    </div>
+</footer>
+
+<script src="{% static 'uniform/js/app.js' %}" defer></script>
+</body>
+</html>

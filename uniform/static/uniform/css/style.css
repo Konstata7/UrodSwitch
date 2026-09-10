@@ -1,0 +1,225 @@
+/* ============================================================
+   Uniform Applicator — стили одностраничника.
+   Тема вынесена в CSS-переменные (:root) — меняйте под свой стиль.
+   ============================================================ */
+
+:root {
+    --bg: #10141c;
+    --bg-soft: #171d29;
+    --card: #1d2534;
+    --border: #2b3549;
+    --text: #e8edf6;
+    --text-dim: #93a0b8;
+    --accent: #4f8cff;
+    --accent-hover: #6ba1ff;
+    --ok: #37c98a;
+    --error: #ff6b6b;
+    --radius: 14px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    /* «шахматный» фон — видно прозрачность PNG */
+    --checker: conic-gradient(#2a3446 25%, #1a2130 0 50%, #2a3446 0 75%, #1a2130 0);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    line-height: 1.55;
+    color: var(--text);
+    background: radial-gradient(1200px 500px at 70% -10%, #1c2b46 0%, transparent 60%), var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container { width: min(1080px, 100% - 40px); margin-inline: auto; }
+.container-narrow { width: min(760px, 100% - 40px); }
+
+/* ---------- Шапка ---------- */
+.site-header { padding: 64px 0 40px; text-align: center; }
+
+.logo {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--card);
+}
+
+.site-header h1 { margin: 0 0 10px; font-size: clamp(1.8rem, 4vw, 2.9rem); line-height: 1.15; }
+.lead { margin: 0 auto; max-width: 560px; color: var(--text-dim); font-size: 1.1rem; }
+
+/* ---------- Секции ---------- */
+.section { padding: 28px 0 36px; }
+.section-muted { background: var(--bg-soft); border-block: 1px solid var(--border); }
+.section h2 { margin-top: 0; }
+
+main { flex: 1; }
+
+/* ---------- Сообщения ---------- */
+.alert {
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+.alert-error { color: #ffd7d7; background: rgba(255, 107, 107, 0.12); border-color: rgba(255, 107, 107, 0.45); }
+
+/* ---------- Форма ---------- */
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+}
+
+.dropzone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 210px;
+    padding: 22px 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, transform 0.2s;
+}
+.dropzone:hover, .dropzone:focus-within { border-color: var(--accent); transform: translateY(-2px); }
+
+/* Прячем сам input, но оставляем его фокусируемым */
+.file-input {
+    position: absolute;
+    width: 1px; height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.dropzone-title { font-weight: 600; font-size: 1.05rem; }
+.dropzone-hint { color: var(--text-dim); font-size: 0.85rem; }
+
+/* ---------- Предпросмотры и результат ---------- */
+.preview {
+    display: block;
+    width: 128px;
+    height: 128px;
+    border-radius: 8px;
+    background: var(--checker);
+    background-size: 16px 16px;
+    image-rendering: pixelated;
+    outline: 1px solid var(--border);
+    object-fit: contain;
+}
+
+.preview-lg { width: 256px; height: 256px; margin-inline: auto; }
+
+.result {
+    margin-top: 30px;
+    padding: 24px;
+    text-align: center;
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+.result-image-wrap { display: flex; justify-content: center; }
+[hidden] { display: none !important; }
+
+/* ---------- Кнопки и статус ---------- */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 22px;
+}
+
+.btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 22px;
+    font: inherit;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--card);
+    cursor: pointer;
+    transition: filter 0.15s, background 0.15s;
+    text-decoration: none;
+}
+.btn:hover { filter: brightness(1.15); }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-download { background: var(--ok); border-color: var(--ok); color: #06281a; }
+.btn-download:hover { background: #4ee3a3; }
+
+.status { color: var(--text-dim); }
+
+/* ---------- Шаги / прочее ---------- */
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.steps li { position: relative; padding: 4px 0 4px 46px; color: var(--text-dim); }
+.steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 2px;
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--card);
+    border: 1px solid var(--border);
+}
+.steps strong { color: var(--text); }
+
+code {
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.07);
+    color: #ffd9a8;
+}
+
+/* ---------- Подвал ---------- */
+.site-footer {
+    margin-top: 30px;
+    padding: 26px 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border);
+}
+.site-footer p { margin: 0; }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ---------- Кнопка перехода в Blockbench Web ---------- */
+.btn-blockbench { background: #b4762b; border-color: #b4762b; color: #fff; }
+.btn-blockbench:hover { background: #cc8632; filter: none; }
+
