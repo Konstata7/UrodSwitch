@@ -9,6 +9,9 @@
     DJANGO_SECRET_KEY      — секретный ключ (в проде задавать обязательно)
     DJANGO_DEBUG           — '1'/'true' — режим отладки (по умолчанию вкл.)
     DJANGO_ALLOWED_HOSTS   — список хостов через запятую
+    DJANGO_MEDIA_CLEANUP   — '0'/'false' — выключить автоочистку media
+    DJANGO_MEDIA_CLEANUP_INTERVAL — как часто убирать media, секунды (1800)
+    DJANGO_MEDIA_CLEANUP_MAX_AGE  — возраст файлов для удаления, секунды (1800)
 """
 
 import os
@@ -24,6 +27,17 @@ def _env_flag(name: str, default: bool = False) -> bool:
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_int(name: str, default: int) -> int:
+    """Читает целочисленную переменную окружения (секунды)."""
+    value = os.environ.get(name)
+    if value is None or not value.strip():
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        return default
 
 
 # SECURITY WARNING: держите ключ в секрете; в проде задайте DJANGO_SECRET_KEY.
@@ -138,7 +152,46 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Автоочистка media
+# Результаты обработки — временные файлы, поэтому приложение само убирает
+# из media всё, что старше MEDIA_CLEANUP_MAX_AGE секунд, проверяя каталог
+# каждые MEDIA_CLEANUP_INTERVAL секунд (по умолчанию 30 минут и 30 минут:
+# файл живёт от получаса до часа). MEDIA_CLEANUP_MAX_AGE = 0 — удалять всё.
+# Поток уборки поднимается из config/wsgi.py и config/asgi.py, то есть
+# работает только в процессе веб-сервера; для cron есть команда
+# `python manage.py clean_media`.
+MEDIA_CLEANUP_ENABLED = _env_flag("DJANGO_MEDIA_CLEANUP", default=True)
+MEDIA_CLEANUP_INTERVAL = _env_int("DJANGO_MEDIA_CLEANUP_INTERVAL", 30 * 60)
+MEDIA_CLEANUP_MAX_AGE = _env_int("DJANGO_MEDIA_CLEANUP_MAX_AGE", 30 * 60)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/stable/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Logging
+# Первым Django применяет свою настройку (DEFAULT_LOGGING), а затем эту — и во
+# втором проходе имена хендлеров из стандартной настройки уже недоступны,
+# поэтому хендлер описан здесь полностью. Пишем только при DEBUG=True и не
+# трогаем логгеры Django (disable_existing_loggers=False).
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_true": {"()": "django.utils.log.RequireDebugTrue"},
+    },
+    "formatters": {
+        "app": {"format": "[{asctime}] {levelname} {name}: {message}", "style": "{"},
+    },
+    "handlers": {
+        "app_console": {
+            "class": "logging.StreamHandler",
+            "filters": ["require_debug_true"],
+            "formatter": "app",
+        },
+    },
+    "loggers": {
+        "uniform": {"handlers": ["app_console"], "level": "INFO", "propagate": False},
+    },
+}

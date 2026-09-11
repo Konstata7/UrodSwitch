@@ -23,7 +23,9 @@ Blockbench (``js/web.js``, функция ``loadInfoFromURL``) значение 
 * ``textures[].source`` — наша PNG-картинка в виде data-URL;
 * ``resolution`` — размер UV-разметки (64×64).
 
-Пользователь сразу попадает в редактор скина с уже загруженной текстурой.
+Модель игрока выбирается по формату скина (``SKIN_MODELS``): classic — Steve
+с широкими руками, slim — Alex с узкими. Пользователь сразу попадает в редактор
+нужной модели с уже загруженной текстурой.
 
 Документация параметров: https://blockbench.net/wiki/docs/url-parameters/
 """
@@ -34,6 +36,8 @@ import base64
 import json
 import uuid
 from urllib.parse import quote
+
+from . import skin_formats
 
 #: Веб-приложение Blockbench.
 BLOCKBENCH_URL = "https://web.blockbench.net/"
@@ -46,16 +50,20 @@ BBMODEL_FORMAT = "skin"
 #: сам Blockbench по полю ``skin_model``).
 BBMODEL_FORMAT_VERSION = "4.5"
 
-#: Модель игрока: ``steve`` — широкие руки (Player - Wide).
-#: Тонкие руки — ``alex.java``: в Blockbench меняются действием
-#: «Convert Player Model» (``convert_minecraft_skin_variant``).
-SKIN_MODEL = "steve"
+#: Идентификаторы моделей игрока в Blockbench (поле ``skin_model``):
+#: ``steve`` — широкие руки (Player - Wide), ``alex.java`` — узкие (Player - Slim,
+#: Java Edition). Из-за суффикса ``.java`` Blockbench берёт именно java-вариант
+#: slim-модели, а не bedrock-вариант с другими пропорциями.
+SKIN_MODELS = {
+    skin_formats.CLASSIC: "steve",
+    skin_formats.SLIM: "alex.java",
+}
 
 #: Поза по умолчанию — как в диалоге «New Skin» с включённой галочкой Pose.
 #: ``none`` — модель в T-позе.
 SKIN_POSE = "natural"
 
-#: Имя проекта в редакторе (файл на диске при этом остаётся <uuid>.png).
+#: Имя проекта в редакторе (файл на диске при этом остаётся <uuid>_<формат>.png).
 PROJECT_NAME = "uniform_applicator"
 PROJECT_FILENAME = f"{PROJECT_NAME}.bbmodel"
 
@@ -71,7 +79,7 @@ def build_project(
     uv_size: tuple[int, int],
     *,
     name: str = PROJECT_NAME,
-    model: str = SKIN_MODEL,
+    model: str = SKIN_MODELS[skin_formats.DEFAULT],
     pose: str = SKIN_POSE,
 ) -> dict[str, object]:
     """
@@ -79,6 +87,7 @@ def build_project(
 
     ``uv_size`` — размер UV-разметки скина (64×64): по нему Blockbench
     раскладывает развёртку на текстуру. Сама картинка может быть и крупнее.
+    ``model`` — модель игрока из ``SKIN_MODELS`` (зависит от формата скина).
     """
     width, height = uv_size
     return {

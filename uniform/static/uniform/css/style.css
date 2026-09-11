@@ -71,10 +71,111 @@ main { flex: 1; }
 }
 .alert-error { color: #ffd7d7; background: rgba(255, 107, 107, 0.12); border-color: rgba(255, 107, 107, 0.45); }
 
+/* ---------- Шаг 1: выбор формата скина ---------- */
+.format-choice {
+    margin: 0 0 22px;
+    padding: 18px 20px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+
+/* Заголовок — обычный блок внутри карточки: рамка остаётся целой,
+   ничего не вылезает за её пределы. */
+.format-legend {
+    margin: 0 0 12px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+}
+
+.format-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.format-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-soft);
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.format-option:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+/* выбранный вариант подсвечиваем */
+.format-option:has(.format-input:checked) {
+    border-color: var(--accent);
+    background: rgba(79, 140, 255, 0.12);
+}
+.format-option:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.format-input {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.format-option-body { display: flex; flex-direction: column; gap: 2px; }
+.format-option-title { font-weight: 600; }
+.format-option-hint { color: var(--text-dim); font-size: 0.85rem; }
+
+.format-note { margin: 14px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+/* Что определилось по скину (или что выбрали вручную). */
+.format-status { margin: 12px 0 0; color: var(--ok); font-size: 0.9rem; }
+.format-status.is-manual { color: var(--text-dim); }
+
+/* ---------- Скин игрока по нику: одна широкая строка над блоками ---------- */
+.nick-skin {
+    margin: 0 0 18px;
+    padding: 18px 20px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+}
+
+.nick-skin-title { display: block; margin: 0 0 10px; font-weight: 600; font-size: 1.05rem; }
+
+.nick-skin-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.nick-input {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 15px 18px;
+    font: inherit;
+    font-size: 1.05rem;
+    color: var(--text);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.nick-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.nick-input::placeholder { color: var(--text-dim); }
+
+.btn-nick { padding: 15px 24px; }
+
+.nick-skin-hint { margin: 10px 0 0; color: var(--text-dim); font-size: 0.8rem; }
+
+.nick-skin-status { margin: 10px 0 0; font-size: 0.85rem; color: var(--ok); }
+.nick-skin-status.is-error { color: var(--error); }
+
 /* ---------- Форма ---------- */
+/* Скин и форма — две одинаковые колонки: и по ширине, и по высоте. */
 .upload-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-auto-rows: 1fr;
     gap: 18px;
 }
 
@@ -136,6 +237,20 @@ main { flex: 1; }
     border: 1px solid var(--border);
 }
 .result-image-wrap { display: flex; justify-content: center; }
+
+.result-format {
+    margin: 0 0 16px;
+    display: inline-block;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    background: var(--bg-soft);
+}
+
+.result-note { margin: 0 0 16px; color: var(--text-dim); font-size: 0.9rem; }
+
 [hidden] { display: none !important; }
 
 /* ---------- Кнопки и статус ---------- */
@@ -199,7 +314,6 @@ code {
 
 /* ---------- Подвал ---------- */
 .site-footer {
-    margin-top: 30px;
     padding: 26px 0;
     text-align: center;
     color: var(--text-dim);
