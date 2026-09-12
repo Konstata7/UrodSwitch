@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Uniform Applicator — наложение формы на скин</title>
+    <title>UrodSwitch - наложение формы на скин</title>
     <meta name="description" content="Одностраничный инструмент: наложение формы (uniform) на скин Minecraft. Загрузите два PNG 64×64 и скачайте результат.">
     <link rel="stylesheet" href="{% static 'uniform/css/style.css' %}">
 </head>
@@ -12,9 +12,9 @@
 
 <header class="site-header">
     <div class="container">
-        <p class="logo">Uniform&nbsp;Applicator</p>
-        <h1>Наложи форму на свой скин</h1>
-        <p class="lead">Загрузите скин и форму — получите готовое изображение за один шаг.</p>
+        <p class="logo">UrodSwitch</p>
+        <h1>Кем ты хочешь быть сегодня?</h1>
+        <p class="lead">Наложи форму на свой скин в пару кликов</p>
     </div>
 </header>
 
@@ -36,12 +36,12 @@
 
                 {# ---------- 1. Формат скина ---------- #}
                 {% comment %}
-                    Заголовок — обычный блок внутри карточки, а не <legend>:
+                    Заголовок - обычный блок внутри карточки, а не <legend>:
                     legend рисуется прямо на рамке и «прорезает» её.
                 {% endcomment %}
                 <div class="format-choice" id="format-choice" role="radiogroup"
                      aria-labelledby="format-legend">
-                    <p class="format-legend" id="format-legend">1. Формат скина</p>
+                    <p class="format-legend" id="format-legend">Формат скина</p>
                     <div class="format-options">
                         {% for format in skin_format_choices %}
                             <label class="format-option" for="format-{{ format.value }}">
@@ -58,7 +58,7 @@
                     {# Сюда пишем, какой формат определился по скину. #}
                     <p class="format-status" id="format-status" role="status" hidden></p>
                     <p class="format-note">
-                        Формат определяется по самому скину — файлом или по нику.
+                        Формат определяется по самому скину - файлом или по нику.
                         Свой вариант можно выбрать вручную: тогда он главнее.
                     </p>
                 </div>
@@ -70,17 +70,13 @@
                     <div class="nick-skin-row">
                         <input class="nick-input" type="text" id="id-nickname" name="nickname"
                                value="{{ nickname|default:'' }}"
-                               placeholder="Впишите ник, например Notch"
+                               placeholder="Впишите ник, например SPECTRR3"
                                maxlength="16" autocomplete="off" spellcheck="false">
                         <button type="button" class="btn btn-nick" id="nick-btn">Найти скин</button>
                     </div>
                     {# Подтверждённый ник: его скин уже найден и пойдёт в обработку. #}
                     <input type="hidden" id="skin-nickname" name="skin_nickname"
                            value="{{ nickname|default:'' }}">
-                    <p class="nick-skin-hint">
-                        Возьмём актуальный скин с серверов Mojang — те же данные, что показывает NameMC.
-                        Найденный скин появится в блоке «2. Скин» ниже, формат classic/slim определится сам.
-                    </p>
                     <p class="nick-skin-status" id="nick-status" role="status" hidden></p>
                 </div>
 
@@ -89,18 +85,18 @@
                     <label class="dropzone" for="id-skin">
                         <input class="file-input" type="file" id="id-skin" name="skin"
                                accept="image/png">
-                        <span class="dropzone-title">2. Скин</span>
+                        <span class="dropzone-title">Скин</span>
                         <img class="preview" id="preview-skin" alt="Предпросмотр скина" hidden>
-                        <span class="dropzone-hint">PNG&nbsp;64×64 — файлом или по нику</span>
+                        <span class="dropzone-hint">Загрузите PNG&nbsp;64×64</span>
                     </label>
 
                     {# ---------- 3. Форма (uniform) ---------- #}
                     <label class="dropzone" for="id-uniform">
                         <input class="file-input" type="file" id="id-uniform" name="uniform"
                                accept="image/png" required>
-                        <span class="dropzone-title">3. Форма</span>
+                        <span class="dropzone-title">Форма</span>
                         <img class="preview" id="preview-uniform" alt="Предпросмотр формы" hidden>
-                        <span class="dropzone-hint">PNG&nbsp;64×64 на прозрачном фоне</span>
+                        <span class="dropzone-hint">Загрузите PNG&nbsp;64×64</span>
                     </label>
                 </div>
 
@@ -125,7 +121,7 @@
                 <div class="actions">
                     <a id="download-link" class="btn btn-download"
                        href="{% if result_url %}{{ result_url }}{% endif %}"
-                       download="{{ result_name|default:'uniform_applicator.png' }}">Скачать PNG</a>
+                       download="{{ result_name|default:'urodswitch.png' }}">Скачать PNG</a>
                     <a id="blockbench-btn" class="btn btn-blockbench btn-primary"
                        href="{% if result_file %}{% url 'uniform:blockbench' result_file %}{% else %}#{% endif %}"
                        target="_blank" rel="noopener noreferrer"
@@ -136,29 +132,9 @@
         </div>
     </section>
 
-    {# ---------- Как это работает (заполняется под задачу) ---------- #}
-    <section class="section section-muted" aria-labelledby="howto-title">
-        <div class="container">
-            <h2 id="howto-title">Как это работает</h2>
-            <ol class="steps">
-                <li><strong>Формат.</strong> Выберите формат скина:
-                    <strong>Classic</strong> — широкие руки (4 пикселя, модель Steve) или
-                    <strong>Slim</strong> — узкие руки (3 пикселя, модель Alex).
-                    От формата зависит разметка рук в форме и модель, которая откроется в Blockbench.</li>
-                <li><strong>Скин.</strong> Загрузите PNG 64×64 — развёртка скина, на который нужно наложить форму.
-                    Или впишите ник игрока: актуальный скин подтянется с серверов Mojang
-                    (те же данные, что показывает NameMC), а формат classic/slim определится сам.</li>
-                <li><strong>Форма.</strong> Загрузите PNG 64×64 на прозрачном фоне</li>
-                <li><strong>Готово.</strong> Сервер наложит форму — результат можно скачать PNG
-                    или сразу доработать в веб-редакторе <strong>Blockbench</strong>
-                    (откроется модель выбранного формата с уже загруженной текстурой).</li>
-            </ol>
-        </div>
-    </section>
-
 <footer class="site-footer">
     <div class="container">
-        <p>Слава Городу Уродов!</p>
+        <p>Сделано при поддержке ©︎"Город Уродов"</p>
     </div>
 </footer>
 

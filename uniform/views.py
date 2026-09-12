@@ -44,7 +44,7 @@ from .services import ImageProcessError
 TEMPLATE = "uniform/index.html"
 
 # Имя файла, под которым браузер сохранит результат при скачивании.
-RESULT_FILENAME = "uniform_applicator.png"
+RESULT_FILENAME = "urodswitch.png"
 
 # В имени файла результата зашит формат скина: <uuid4>_<формат>.png.
 # Разрешаем открывать в Blockbench только такие файлы результатов.

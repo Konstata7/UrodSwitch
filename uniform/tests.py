@@ -496,7 +496,7 @@ class BlockbenchProjectTests(TestCase):
     def test_project_embeds_skin_texture(self):
         """В проекте лежит скин как текстура, а не пустая заготовка."""
         png = png_bytes(make_skin())
-        project = blockbench.build_project(png, (64, 64), name="uniform_applicator")
+        project = blockbench.build_project(png, (64, 64), name="urodswitch")
 
         self.assertEqual(project["meta"]["model_format"], "skin")
         self.assertTrue(project["meta"]["box_uv"])
@@ -910,7 +910,7 @@ class PageTests(TestCase):
 
         query = parse_qs(urlparse(location).query)
         self.assertEqual(query["loadtype"], ["json"])
-        self.assertEqual(query["loadname"], ["uniform_applicator.bbmodel"])
+        self.assertEqual(query["loadname"], ["urodswitch.bbmodel"])
 
         project = json.loads(query["loaddata"][0])
         self.assertEqual(project["meta"]["model_format"], "skin")

@@ -64,7 +64,7 @@ SKIN_MODELS = {
 SKIN_POSE = "natural"
 
 #: Имя проекта в редакторе (файл на диске при этом остаётся <uuid>_<формат>.png).
-PROJECT_NAME = "uniform_applicator"
+PROJECT_NAME = "urodswitch"
 PROJECT_FILENAME = f"{PROJECT_NAME}.bbmodel"
 
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   Uniform Applicator — логика одностраничника (vanilla JS).
+   UrodSwitch — логика одностраничника (vanilla JS).
 
    Что делает:
      1. показывает локальный предпросмотр выбранных файлов;
@@ -334,7 +334,7 @@
                 if (res.ok && res.data.ok) {
                     resultImage.src = res.data.url;
                     downloadLink.href = res.data.url;
-                    downloadLink.download = res.data.download || 'uniform_applicator.png';
+                    downloadLink.download = res.data.download || 'urodswitch.png';
                     if (resultFormat) {
                         resultFormat.textContent = res.data.format_label || '';
                         resultFormat.hidden = !res.data.format_label;

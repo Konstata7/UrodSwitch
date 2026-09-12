@@ -1,5 +1,5 @@
 /* ============================================================
-   Uniform Applicator — стили одностраничника.
+   UrodSwitch — стили одностраничника.
    Тема вынесена в CSS-переменные (:root) — меняйте под свой стиль.
    ============================================================ */
 
@@ -145,7 +145,7 @@ main { flex: 1; }
     box-shadow: var(--shadow);
 }
 
-.nick-skin-title { display: block; margin: 0 0 10px; font-weight: 600; font-size: 1.05rem; }
+.nick-skin-title { display: block; margin: 0 0 10px; font-weight: 600; font-size: 1.05rem; text-align: center;}
 
 .nick-skin-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -337,3 +337,6 @@ code {
 .btn-blockbench { background: #b4762b; border-color: #b4762b; color: #fff; }
 .btn-blockbench:hover { background: #cc8632; filter: none; }
 
+#format-legend {
+    text-align: center;
+}

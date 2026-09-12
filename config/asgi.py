@@ -1,5 +1,5 @@
 """
-ASGI config for uniform_applicator project.
+ASGI config for UrodSwitch project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

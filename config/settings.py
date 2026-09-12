@@ -1,5 +1,5 @@
 """
-Настройки Django-проекта «Uniform Applicator».
+Настройки Django-проекта «UrodSwitch».
 
 Одностраничный сайт: загрузка скина и формы (uniform), наложение
 формы на скин, предпросмотр и скачивание результата.
@@ -43,7 +43,7 @@ def _env_int(name: str, default: int) -> int:
 # SECURITY WARNING: держите ключ в секрете; в проде задайте DJANGO_SECRET_KEY.
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
-    "django-insecure-kn6y8xk1wq!(dev-only-key)uniform-applicator-7z#m@+q2v9$r4h",
+    "django-insecure-kn6y8xk1wq!(dev-only-key)urodswitch-7z#m@+q2v9$r4h",
 )
 
 # SECURITY WARNING: не запускайте с включённым DEBUG в проде!

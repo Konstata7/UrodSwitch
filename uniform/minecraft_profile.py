@@ -60,7 +60,7 @@ TIMEOUT = 10
 #: Сколько секунд держать ответ в кэше.
 CACHE_TTL = 300
 
-USER_AGENT = "uniform-applicator/1.0"
+USER_AGENT = "urodswitch/1.0"
 
 
 class ProfileError(Exception):

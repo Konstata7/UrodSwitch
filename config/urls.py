@@ -1,5 +1,5 @@
 """
-Конфигурация URL проекта «Uniform Applicator».
+Конфигурация URL проекта «UrodSwitch».
 
 Единственная страница сайта — '/', на ней же обрабатывается
 загрузка файлов (POST). /admin/ доступен для служебных нужд.
@@ -20,8 +20,8 @@ def _media_serve(request, path):
 
 
 # Заголовки админки (удобно, если админка будет использоваться).
-admin.site.site_header = "Uniform Applicator"
-admin.site.site_title = "Uniform Applicator"
+admin.site.site_header = "UrodSwitch"
+admin.site.site_title = "UrodSwitch"
 admin.site.index_title = "Управление"
 
 urlpatterns = [
